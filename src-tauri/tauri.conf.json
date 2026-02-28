@@ -13,8 +13,15 @@
     "windows": [
       {
         "title": "hyut",
-        "width": 800,
-        "height": 600
+        "width": 900,
+        "height": 700,
+        "minWidth": 500,
+        "minHeight": 400,
+        "resizable": true,
+        "alwaysOnTop": true,
+        "center": true,
+        "decorations": false,
+        "visible": false
       }
     ],
     "security": {
