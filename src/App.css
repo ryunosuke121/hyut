@@ -63,23 +63,10 @@ html, body, #root {
   overflow: hidden;
 }
 
-/* Title Bar */
+/* Title Bar (spacer for native macOS title bar overlay) */
 .titlebar {
   height: var(--titlebar-height);
-  background: var(--bg-sidebar);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-  -webkit-user-select: none;
-  border-bottom: 1px solid var(--border-color);
   flex-shrink: 0;
-}
-
-.titlebar-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
 }
 
 /* Sidebar */
