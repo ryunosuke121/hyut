@@ -1,50 +1,142 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
+import { useEffect, useCallback, useRef } from "react";
+import { getCurrentWindow } from "@tauri-apps/api/window";
+import Layout from "./components/Layout";
+import Sidebar from "./components/Sidebar";
+import Editor, { type EditorHandle } from "./components/Editor";
+import { useMemos } from "./hooks/useMemos";
+import { useAutoSave } from "./hooks/useAutoSave";
+import { useAppState } from "./hooks/useAppState";
 import "./App.css";
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+  const {
+    memos,
+    currentMemo,
+    loading,
+    selectMemo,
+    createNew,
+    remove,
+    updateCurrentBody,
+  } = useMemos();
+  const { save, flush } = useAutoSave();
+  const { lastMemoId, setLastMemoId } = useAppState();
+  const editorRef = useRef<EditorHandle>(null);
+  const initializedRef = useRef(false);
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
+  // Restore last memo on load
+  useEffect(() => {
+    if (!loading && !initializedRef.current) {
+      initializedRef.current = true;
+      if (lastMemoId && memos.some((m) => m.id === lastMemoId)) {
+        selectMemo(lastMemoId);
+      } else if (memos.length > 0) {
+        selectMemo(memos[0].id);
+      }
+    }
+  }, [loading, memos, lastMemoId, selectMemo]);
+
+  // Track current memo in app state
+  useEffect(() => {
+    if (currentMemo) {
+      setLastMemoId(currentMemo.meta.id);
+    }
+  }, [currentMemo, setLastMemoId]);
+
+  const handleCreate = useCallback(async () => {
+    await flush();
+    await createNew();
+    setTimeout(() => editorRef.current?.focus(), 50);
+  }, [flush, createNew]);
+
+  // Esc to hide, Cmd+N for new memo
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        getCurrentWindow().hide();
+      }
+      if (e.key === "n" && e.metaKey) {
+        e.preventDefault();
+        handleCreate();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleCreate]);
+
+  // Hide on blur + focus editor on window focus
+  useEffect(() => {
+    const appWindow = getCurrentWindow();
+    const unlisten = appWindow.onFocusChanged(({ payload: focused }) => {
+      if (focused) {
+        setTimeout(() => editorRef.current?.focus(), 50);
+      } else {
+        appWindow.hide();
+      }
+    });
+    return () => {
+      unlisten.then((fn) => fn());
+    };
+  }, []);
+
+  const handleSelect = useCallback(
+    async (id: string) => {
+      await flush();
+      await selectMemo(id);
+    },
+    [flush, selectMemo]
+  );
+
+  const handleDelete = useCallback(
+    async (id: string) => {
+      await remove(id);
+    },
+    [remove]
+  );
+
+  const handleEditorChange = useCallback(
+    (markdown: string) => {
+      if (!currentMemo) return;
+      updateCurrentBody(markdown);
+      save(currentMemo.meta.id, markdown);
+    },
+    [currentMemo, updateCurrentBody, save]
+  );
+
+  if (loading) {
+    return <div className="app-loading">Loading...</div>;
   }
 
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
-
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
+    <Layout
+      sidebar={
+        <Sidebar
+          memos={memos}
+          currentMemoId={currentMemo?.meta.id ?? null}
+          onSelect={handleSelect}
+          onCreate={handleCreate}
+          onDelete={handleDelete}
         />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </main>
+      }
+      editor={
+        currentMemo ? (
+          <Editor
+            key={currentMemo.meta.id}
+            ref={editorRef}
+            content={currentMemo.body}
+            onChange={handleEditorChange}
+          />
+        ) : (
+          <div className="empty-state">
+            <div className="empty-state-text">
+              Create a new memo to get started
+            </div>
+            <button className="empty-state-btn" onClick={handleCreate}>
+              New Memo
+            </button>
+          </div>
+        )
+      }
+    />
   );
 }
 
