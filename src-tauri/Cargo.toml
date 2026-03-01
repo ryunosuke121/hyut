@@ -23,5 +23,5 @@ chrono = { version = "0.4", features = ["serde"] }
 serde_yaml = "0.9"
 uuid = { version = "1", features = ["v4"] }
 objc2 = "0.6"
-objc2-app-kit = { version = "0.3", features = ["NSWindow", "NSApplication", "NSRunningApplication"] }
+objc2-app-kit = { version = "0.3", features = ["NSWindow", "NSApplication", "NSRunningApplication", "NSColor"] }
 objc2-foundation = "0.3"

@@ -8,7 +8,7 @@ use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut,
 mod macos {
     use objc2::MainThreadMarker;
     use objc2_app_kit::{
-        NSApplication, NSApplicationActivationPolicy, NSWindow, NSWindowCollectionBehavior,
+        NSApplication, NSApplicationActivationPolicy, NSColor, NSWindow, NSWindowCollectionBehavior,
     };
 
     pub fn set_accessory_policy() {
@@ -24,6 +24,11 @@ mod macos {
                 | NSWindowCollectionBehavior::FullScreenAuxiliary,
         );
         ns_window.setLevel(101); // NSPopUpMenuWindowLevel
+
+        // Liquid Glass: transparent window background
+        let clear = NSColor::clearColor();
+        ns_window.setBackgroundColor(Some(&clear));
+        ns_window.setAlphaValue(0.92);
     }
 
     pub fn show_window(ns_window: &NSWindow) {
