@@ -2,7 +2,6 @@ import { Extension } from "@tiptap/core";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
-import Placeholder from "@tiptap/extension-placeholder";
 import { Table } from "@tiptap/extension-table";
 import { TableCell } from "@tiptap/extension-table-cell";
 import { TableHeader } from "@tiptap/extension-table-header";
@@ -107,9 +106,6 @@ const Editor = forwardRef<EditorHandle, EditorProps>(
         TableRow,
         TableCell,
         TableHeader,
-        Placeholder.configure({
-          placeholder: "Start writing...",
-        }),
         Typography,
         BulletToTaskList,
         Markdown,
