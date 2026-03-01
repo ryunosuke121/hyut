@@ -33,15 +33,19 @@ export default function MemoListItem({
     <div
       className={`memo-list-item ${isActive ? "active" : ""}`}
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") onClick();
+      }}
+      role="button"
+      tabIndex={0}
     >
-      <div className="memo-list-item-title">
-        {memo.title || "Untitled"}
-      </div>
+      <div className="memo-list-item-title">{memo.title || "Untitled"}</div>
       <div className="memo-list-item-meta">
         <span className="memo-list-item-time">
           {relativeTime(memo.updated_at)}
         </span>
         <button
+          type="button"
           className="memo-list-item-delete"
           onClick={(e) => {
             e.stopPropagation();

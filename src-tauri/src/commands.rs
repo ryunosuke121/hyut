@@ -29,7 +29,7 @@ pub fn list_memos() -> Result<Vec<MemoSummary>, String> {
     for entry in entries {
         let entry = entry.map_err(|e| e.to_string())?;
         let path = entry.path();
-        if path.extension().map_or(false, |ext| ext == "md") {
+        if path.extension().is_some_and(|ext| ext == "md") {
             let id = path
                 .file_stem()
                 .unwrap_or_default()

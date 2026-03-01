@@ -20,7 +20,12 @@ export default function Sidebar({
     <div className="sidebar">
       <div className="sidebar-header">
         <span className="sidebar-title">Memos</span>
-        <button className="sidebar-new-btn" onClick={onCreate} title="New memo (⌘N)">
+        <button
+          type="button"
+          className="sidebar-new-btn"
+          onClick={onCreate}
+          title="New memo (⌘N)"
+        >
           +
         </button>
       </div>

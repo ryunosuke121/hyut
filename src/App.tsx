@@ -1,11 +1,11 @@
-import { useEffect, useCallback, useRef } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { useCallback, useEffect, useRef } from "react";
+import Editor, { type EditorHandle } from "./components/Editor";
 import Layout from "./components/Layout";
 import Sidebar from "./components/Sidebar";
-import Editor, { type EditorHandle } from "./components/Editor";
-import { useMemos } from "./hooks/useMemos";
-import { useAutoSave } from "./hooks/useAutoSave";
 import { useAppState } from "./hooks/useAppState";
+import { useAutoSave } from "./hooks/useAutoSave";
+import { useMemos } from "./hooks/useMemos";
 import "./App.css";
 
 function App() {
@@ -83,14 +83,14 @@ function App() {
       await flush();
       await selectMemo(id);
     },
-    [flush, selectMemo]
+    [flush, selectMemo],
   );
 
   const handleDelete = useCallback(
     async (id: string) => {
       await remove(id);
     },
-    [remove]
+    [remove],
   );
 
   const handleEditorChange = useCallback(
@@ -99,7 +99,7 @@ function App() {
       updateCurrentBody(markdown);
       save(currentMemo.meta.id, markdown);
     },
-    [currentMemo, updateCurrentBody, save]
+    [currentMemo, updateCurrentBody, save],
   );
 
   if (loading) {
@@ -130,7 +130,11 @@ function App() {
             <div className="empty-state-text">
               Create a new memo to get started
             </div>
-            <button className="empty-state-btn" onClick={handleCreate}>
+            <button
+              type="button"
+              className="empty-state-btn"
+              onClick={handleCreate}
+            >
               New Memo
             </button>
           </div>

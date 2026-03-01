@@ -8,8 +8,7 @@ use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut,
 mod macos {
     use objc2::MainThreadMarker;
     use objc2_app_kit::{
-        NSApplication, NSApplicationActivationPolicy, NSWindow,
-        NSWindowCollectionBehavior,
+        NSApplication, NSApplicationActivationPolicy, NSWindow, NSWindowCollectionBehavior,
     };
 
     pub fn set_accessory_policy() {
@@ -67,43 +66,41 @@ pub fn run() {
 
                 let window = app.get_webview_window("main").expect("main window");
                 let ns_win = window.ns_window().expect("ns_window");
-                let ns_window = unsafe {
-                    &*(ns_win as *const objc2_app_kit::NSWindow)
-                };
+                let ns_window = unsafe { &*(ns_win as *const objc2_app_kit::NSWindow) };
                 macos::configure_window(ns_window);
 
                 let ns_ptr = ns_win as usize;
-                app.global_shortcut().on_shortcut(shortcut, move |_app, _shortcut, event| {
-                    if event.state != ShortcutState::Pressed {
-                        return;
-                    }
-                    let ns_window = unsafe {
-                        &*(ns_ptr as *const objc2_app_kit::NSWindow)
-                    };
-                    if macos::is_visible(ns_window) {
-                        macos::hide_window(ns_window);
-                    } else {
-                        macos::show_window(ns_window);
-                    }
-                })?;
+                app.global_shortcut()
+                    .on_shortcut(shortcut, move |_app, _shortcut, event| {
+                        if event.state != ShortcutState::Pressed {
+                            return;
+                        }
+                        let ns_window = unsafe { &*(ns_ptr as *const objc2_app_kit::NSWindow) };
+                        if macos::is_visible(ns_window) {
+                            macos::hide_window(ns_window);
+                        } else {
+                            macos::show_window(ns_window);
+                        }
+                    })?;
             }
 
             #[cfg(not(target_os = "macos"))]
             {
                 let handle = app.handle().clone();
-                app.global_shortcut().on_shortcut(shortcut, move |_app, _shortcut, event| {
-                    if event.state != ShortcutState::Pressed {
-                        return;
-                    }
-                    if let Some(window) = handle.get_webview_window("main") {
-                        if window.is_visible().unwrap_or(false) {
-                            let _ = window.hide();
-                        } else {
-                            let _ = window.show();
-                            let _ = window.set_focus();
+                app.global_shortcut()
+                    .on_shortcut(shortcut, move |_app, _shortcut, event| {
+                        if event.state != ShortcutState::Pressed {
+                            return;
                         }
-                    }
-                })?;
+                        if let Some(window) = handle.get_webview_window("main") {
+                            if window.is_visible().unwrap_or(false) {
+                                let _ = window.hide();
+                            } else {
+                                let _ = window.show();
+                                let _ = window.set_focus();
+                            }
+                        }
+                    })?;
             }
 
             if cfg!(debug_assertions) {
