@@ -1,5 +1,6 @@
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import ConfirmDialog from "./components/ConfirmDialog";
 import Editor, { type EditorHandle } from "./components/Editor";
 import Layout from "./components/Layout";
 import Sidebar from "./components/Sidebar";
@@ -22,6 +23,7 @@ function App() {
   const { lastMemoId, setLastMemoId } = useAppState();
   const editorRef = useRef<EditorHandle>(null);
   const initializedRef = useRef(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   // Restore last memo on load
   useEffect(() => {
@@ -86,12 +88,20 @@ function App() {
     [flush, selectMemo],
   );
 
-  const handleDelete = useCallback(
-    async (id: string) => {
-      await remove(id);
-    },
-    [remove],
-  );
+  const handleDeleteRequest = useCallback((id: string) => {
+    setPendingDeleteId(id);
+  }, []);
+
+  const handleDeleteConfirm = useCallback(async () => {
+    if (pendingDeleteId) {
+      await remove(pendingDeleteId);
+      setPendingDeleteId(null);
+    }
+  }, [pendingDeleteId, remove]);
+
+  const handleDeleteCancel = useCallback(() => {
+    setPendingDeleteId(null);
+  }, []);
 
   const handleEditorChange = useCallback(
     (markdown: string) => {
@@ -107,40 +117,49 @@ function App() {
   }
 
   return (
-    <Layout
-      sidebar={
-        <Sidebar
-          memos={memos}
-          currentMemoId={currentMemo?.meta.id ?? null}
-          onSelect={handleSelect}
-          onCreate={handleCreate}
-          onDelete={handleDelete}
-        />
-      }
-      editor={
-        currentMemo ? (
-          <Editor
-            key={currentMemo.meta.id}
-            ref={editorRef}
-            content={currentMemo.body}
-            onChange={handleEditorChange}
+    <>
+      <Layout
+        sidebar={
+          <Sidebar
+            memos={memos}
+            currentMemoId={currentMemo?.meta.id ?? null}
+            onSelect={handleSelect}
+            onCreate={handleCreate}
+            onDelete={handleDeleteRequest}
           />
-        ) : (
-          <div className="empty-state">
-            <div className="empty-state-text">
-              Create a new memo to get started
+        }
+        editor={
+          currentMemo ? (
+            <Editor
+              key={currentMemo.meta.id}
+              ref={editorRef}
+              content={currentMemo.body}
+              onChange={handleEditorChange}
+            />
+          ) : (
+            <div className="empty-state">
+              <div className="empty-state-text">
+                Create a new memo to get started
+              </div>
+              <button
+                type="button"
+                className="empty-state-btn"
+                onClick={handleCreate}
+              >
+                New Memo
+              </button>
             </div>
-            <button
-              type="button"
-              className="empty-state-btn"
-              onClick={handleCreate}
-            >
-              New Memo
-            </button>
-          </div>
-        )
-      }
-    />
+          )
+        }
+      />
+      {pendingDeleteId && (
+        <ConfirmDialog
+          message="Are you sure you want to delete this memo?"
+          onConfirm={handleDeleteConfirm}
+          onCancel={handleDeleteCancel}
+        />
+      )}
+    </>
   );
 }
 
