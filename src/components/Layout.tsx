@@ -10,6 +10,7 @@ import TitleBar from "./TitleBar";
 const MIN_SIDEBAR_WIDTH = 180;
 const MAX_SIDEBAR_WIDTH = 400;
 const DEFAULT_SIDEBAR_WIDTH = 260;
+const COLLAPSE_THRESHOLD = 120;
 
 interface Props {
   sidebar: ReactNode;
@@ -52,7 +53,7 @@ export default function Layout({ sidebar, editor }: Props) {
     const handleMouseMove = (e: MouseEvent) => {
       const delta = e.clientX - startX.current;
       const rawWidth = startWidth.current + delta;
-      if (rawWidth < MIN_SIDEBAR_WIDTH) {
+      if (rawWidth < COLLAPSE_THRESHOLD) {
         setSidebarOpen(false);
         setIsResizing(false);
         document.body.style.cursor = "";
