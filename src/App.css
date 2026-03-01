@@ -135,9 +135,7 @@ body,
   bottom: 8px;
   left: 8px;
   right: auto;
-  background: var(--glass-sidebar);
   color: var(--text-secondary);
-  border: 0.5px solid var(--glass-border-subtle);
 }
 
 /* Sidebar Container */
