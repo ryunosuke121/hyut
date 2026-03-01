@@ -12,6 +12,7 @@ jobs:
   build-and-release:
     name: Build and Release
     runs-on: macos-latest
+    environment: main
     permissions:
       contents: write
     steps:
