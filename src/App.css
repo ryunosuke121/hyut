@@ -96,6 +96,7 @@ body,
   height: var(--titlebar-height);
   flex-shrink: 0;
   background: transparent;
+  border-bottom: 0.5px solid var(--glass-border-subtle);
 }
 
 /* Sidebar */
