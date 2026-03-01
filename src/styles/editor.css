@@ -161,14 +161,6 @@
   -webkit-backdrop-filter: blur(8px);
 }
 
-.editor-wrapper .tiptap .is-empty::before {
-  content: attr(data-placeholder);
-  float: left;
-  color: var(--text-tertiary);
-  pointer-events: none;
-  height: 0;
-}
-
 .editor-wrapper .tiptap strong {
   font-weight: 600;
 }
