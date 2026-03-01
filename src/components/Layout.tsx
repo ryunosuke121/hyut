@@ -19,7 +19,7 @@ interface Props {
 export default function Layout({ sidebar, editor }: Props) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarWidth, setSidebarWidth] = useState(DEFAULT_SIDEBAR_WIDTH);
-  const isDragging = useRef(false);
+  const [isResizing, setIsResizing] = useState(false);
   const startX = useRef(0);
   const startWidth = useRef(0);
 
@@ -37,7 +37,7 @@ export default function Layout({ sidebar, editor }: Props) {
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
-      isDragging.current = true;
+      setIsResizing(true);
       startX.current = e.clientX;
       startWidth.current = sidebarWidth;
       document.body.style.cursor = "col-resize";
@@ -47,8 +47,9 @@ export default function Layout({ sidebar, editor }: Props) {
   );
 
   useEffect(() => {
+    if (!isResizing) return;
+
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isDragging.current) return;
       const delta = e.clientX - startX.current;
       const newWidth = Math.min(
         MAX_SIDEBAR_WIDTH,
@@ -58,8 +59,7 @@ export default function Layout({ sidebar, editor }: Props) {
     };
 
     const handleMouseUp = () => {
-      if (!isDragging.current) return;
-      isDragging.current = false;
+      setIsResizing(false);
       document.body.style.cursor = "";
       document.body.style.userSelect = "";
     };
@@ -70,7 +70,7 @@ export default function Layout({ sidebar, editor }: Props) {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, []);
+  }, [isResizing]);
 
   return (
     <div className="app-layout">
@@ -112,7 +112,7 @@ export default function Layout({ sidebar, editor }: Props) {
       </TitleBar>
       <div className="app-content">
         <div
-          className={`sidebar-container${sidebarOpen ? "" : " collapsed"}`}
+          className={`sidebar-container${sidebarOpen ? "" : " collapsed"}${isResizing ? " resizing" : ""}`}
           style={
             sidebarOpen
               ? { width: sidebarWidth, minWidth: sidebarWidth }

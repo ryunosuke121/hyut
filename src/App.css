@@ -137,6 +137,10 @@ body,
     min-width 0.2s ease;
 }
 
+.sidebar-container.resizing {
+  transition: none;
+}
+
 .sidebar-container.collapsed {
   width: 0;
   min-width: 0;
