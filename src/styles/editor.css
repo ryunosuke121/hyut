@@ -63,8 +63,19 @@
   gap: 8px;
 }
 
+.editor-wrapper .tiptap ul[data-type="taskList"] li > div {
+  flex: 1;
+  min-height: 1.7em;
+}
+
+.editor-wrapper .tiptap ul[data-type="taskList"] li > div > p {
+  margin: 0;
+}
+
 .editor-wrapper .tiptap ul[data-type="taskList"] li label {
-  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  height: 1.7em;
 }
 
 .editor-wrapper
