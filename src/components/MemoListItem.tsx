@@ -35,6 +35,10 @@ export default function MemoListItem({
       onClick={onClick}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") onClick();
+        if (e.key === "Delete" || e.key === "Backspace") {
+          e.preventDefault();
+          onDelete();
+        }
       }}
       role="button"
       tabIndex={0}
