@@ -20,8 +20,12 @@ export default function ConfirmDialog({ message, onConfirm, onCancel }: Props) {
         e.stopPropagation();
         onCancel();
       }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        onConfirm();
+      }
     },
-    [onCancel],
+    [onCancel, onConfirm],
   );
 
   const handleOverlayClick = useCallback(
