@@ -59,11 +59,17 @@ export function useMemos() {
       setCurrentMemo((prev) => (prev ? { ...prev, body } : null));
       const title = extractTitle(body);
       setMemos((prev) =>
-        prev.map((m) =>
-          m.id === currentMemo.meta.id
-            ? { ...m, title, updated_at: new Date().toISOString() }
-            : m,
-        ),
+        prev
+          .map((m) =>
+            m.id === currentMemo.meta.id
+              ? { ...m, title, updated_at: new Date().toISOString() }
+              : m,
+          )
+          .sort(
+            (a, b) =>
+              new Date(b.updated_at).getTime() -
+              new Date(a.updated_at).getTime(),
+          ),
       );
     },
     [currentMemo],
