@@ -1,41 +1,56 @@
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f5f5f7;
-  --bg-sidebar: #f0f0f2;
-  --bg-hover: #e8e8ec;
-  --bg-active: #dcdce0;
-  --bg-code: #f0f0f2;
+  /* Liquid Glass color system */
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-sidebar: rgba(244, 244, 246, 0.65);
+  --glass-hover: rgba(255, 255, 255, 0.5);
+  --glass-active: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.45);
+  --glass-border-subtle: rgba(0, 0, 0, 0.06);
+  --glass-shadow: rgba(0, 0, 0, 0.08);
+  --glass-shadow-lg: rgba(0, 0, 0, 0.12);
+  --glass-blur: 24px;
+
+  --bg-primary: rgba(255, 255, 255, 0.85);
+  --bg-secondary: rgba(245, 245, 247, 0.7);
+  --bg-code: rgba(240, 240, 242, 0.6);
   --text-primary: #1d1d1f;
   --text-secondary: #6e6e73;
   --text-tertiary: #aeaeb2;
-  --border-color: #d2d2d7;
+  --border-color: rgba(0, 0, 0, 0.08);
   --accent: #007aff;
-  --titlebar-height: 38px;
-  --sidebar-width: 240px;
+  --accent-glass: rgba(0, 122, 255, 0.12);
+  --titlebar-height: 28px;
+  --sidebar-width: 260px;
 
   font-family:
-    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
-    sans-serif;
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Helvetica Neue", sans-serif;
   font-size: 14px;
   line-height: 1.5;
   color: var(--text-primary);
-  background-color: var(--bg-primary);
   -webkit-font-smoothing: antialiased;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-primary: #1e1e1e;
-    --bg-secondary: #2a2a2c;
-    --bg-sidebar: #252527;
-    --bg-hover: #3a3a3c;
-    --bg-active: #48484a;
-    --bg-code: #2c2c2e;
+    --glass-bg: rgba(30, 30, 30, 0.72);
+    --glass-sidebar: rgba(38, 38, 40, 0.65);
+    --glass-hover: rgba(255, 255, 255, 0.08);
+    --glass-active: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-border-subtle: rgba(255, 255, 255, 0.06);
+    --glass-shadow: rgba(0, 0, 0, 0.3);
+    --glass-shadow-lg: rgba(0, 0, 0, 0.5);
+
+    --bg-primary: rgba(30, 30, 30, 0.85);
+    --bg-secondary: rgba(42, 42, 44, 0.7);
+    --bg-code: rgba(44, 44, 46, 0.6);
     --text-primary: #f5f5f7;
     --text-secondary: #98989d;
     --text-tertiary: #636366;
-    --border-color: #3a3a3c;
+    --border-color: rgba(255, 255, 255, 0.08);
     --accent: #0a84ff;
+    --accent-glass: rgba(10, 132, 255, 0.15);
   }
 }
 
@@ -50,6 +65,7 @@ body,
 #root {
   height: 100%;
   overflow: hidden;
+  background: transparent;
 }
 
 /* Layout */
@@ -57,8 +73,16 @@ body,
   display: flex;
   flex-direction: column;
   height: 100vh;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 0.5px solid var(--glass-border);
+  box-shadow:
+    0 0 0 0.5px var(--glass-border-subtle),
+    0 8px 40px var(--glass-shadow-lg),
+    0 2px 12px var(--glass-shadow);
 }
 
 .app-content {
@@ -67,18 +91,22 @@ body,
   overflow: hidden;
 }
 
-/* Title Bar (spacer for native macOS title bar overlay) */
+/* Title Bar */
 .titlebar {
   height: var(--titlebar-height);
   flex-shrink: 0;
+  background: transparent;
+  border-bottom: 0.5px solid var(--glass-border-subtle);
 }
 
 /* Sidebar */
 .sidebar {
   width: var(--sidebar-width);
   min-width: var(--sidebar-width);
-  background: var(--bg-sidebar);
-  border-right: 1px solid var(--border-color);
+  background: var(--glass-sidebar);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border-right: 0.5px solid var(--glass-border-subtle);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -88,46 +116,56 @@ body,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 14px 8px;
+  padding: 12px 16px;
 }
 
 .sidebar-title {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
 }
 
 .sidebar-new-btn {
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   border: none;
-  background: transparent;
+  background: var(--accent-glass);
   color: var(--accent);
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 300;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
   box-shadow: none;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .sidebar-new-btn:hover {
-  background: var(--bg-hover);
+  background: var(--accent);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+}
+
+.sidebar-new-btn:active {
+  transform: scale(0.95);
 }
 
 .sidebar-list {
   flex: 1;
   overflow-y: auto;
-  padding: 0 6px 6px;
+  padding: 0 8px 8px;
 }
 
 .sidebar-empty {
-  padding: 20px 14px;
+  padding: 24px 16px;
   text-align: center;
   color: var(--text-tertiary);
   font-size: 13px;
@@ -135,19 +173,27 @@ body,
 
 /* Memo List Item */
 .memo-list-item {
-  padding: 8px 10px;
-  border-radius: 6px;
+  padding: 10px 12px;
+  border-radius: 10px;
   cursor: pointer;
-  margin-bottom: 1px;
-  transition: background 0.1s;
+  margin-bottom: 2px;
+  transition: all 0.2s ease;
+  border: 0.5px solid transparent;
+  position: relative;
 }
 
 .memo-list-item:hover {
-  background: var(--bg-hover);
+  background: var(--glass-hover);
+  border-color: var(--glass-border-subtle);
+  box-shadow: 0 1px 4px var(--glass-shadow);
 }
 
 .memo-list-item.active {
-  background: var(--bg-active);
+  background: var(--glass-active);
+  border-color: var(--glass-border);
+  box-shadow:
+    0 1px 6px var(--glass-shadow),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.3);
 }
 
 .memo-list-item-title {
@@ -163,7 +209,7 @@ body,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 
 .memo-list-item-time {
@@ -173,9 +219,9 @@ body,
 
 .memo-list-item-delete {
   opacity: 0;
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
   border: none;
   background: transparent;
   color: var(--text-tertiary);
@@ -187,6 +233,7 @@ body,
   line-height: 1;
   padding: 0;
   box-shadow: none;
+  transition: all 0.15s ease;
 }
 
 .memo-list-item:hover .memo-list-item-delete {
@@ -194,7 +241,7 @@ body,
 }
 
 .memo-list-item-delete:hover {
-  background: var(--bg-hover);
+  background: rgba(255, 59, 48, 0.12);
   color: #ff3b30;
 }
 
@@ -204,7 +251,7 @@ body,
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--bg-primary);
+  background: transparent;
 }
 
 /* Empty State */
@@ -214,28 +261,41 @@ body,
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 20px;
 }
 
 .empty-state-text {
   color: var(--text-tertiary);
   font-size: 15px;
+  font-weight: 400;
 }
 
 .empty-state-btn {
-  padding: 8px 20px;
-  border-radius: 8px;
+  padding: 10px 24px;
+  border-radius: 12px;
   border: none;
   background: var(--accent);
   color: white;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  box-shadow: none;
+  box-shadow:
+    0 2px 12px rgba(0, 122, 255, 0.25),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .empty-state-btn:hover {
-  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 16px rgba(0, 122, 255, 0.35),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.2);
+}
+
+.empty-state-btn:active {
+  transform: translateY(0);
 }
 
 /* Loading */
@@ -246,6 +306,7 @@ body,
   justify-content: center;
   color: var(--text-tertiary);
   font-size: 15px;
+  background: transparent;
 }
 
 /* Scrollbar */
@@ -258,10 +319,20 @@ body,
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
+  background: rgba(0, 0, 0, 0.12);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-tertiary);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
 }
