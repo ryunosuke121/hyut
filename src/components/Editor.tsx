@@ -1,7 +1,6 @@
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
-import Placeholder from "@tiptap/extension-placeholder";
 import { Table } from "@tiptap/extension-table";
 import { TableCell } from "@tiptap/extension-table-cell";
 import { TableHeader } from "@tiptap/extension-table-header";
@@ -14,6 +13,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { common, createLowlight } from "lowlight";
 import { forwardRef, useImperativeHandle } from "react";
+import { BulletToTaskList } from "../extensions/bulletToTaskList";
 import "../styles/editor.css";
 
 const lowlight = createLowlight(common);
@@ -43,10 +43,8 @@ const Editor = forwardRef<EditorHandle, EditorProps>(
         TableRow,
         TableCell,
         TableHeader,
-        Placeholder.configure({
-          placeholder: "Start writing...",
-        }),
         Typography,
+        BulletToTaskList,
         Markdown,
       ],
       content,
