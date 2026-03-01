@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Hyut - A fast macOS memo app"
 authors = ["ryunosuke.ito"]
 edition = "2021"
+license = "MIT"
 
 [lib]
 name = "hyut_lib"
