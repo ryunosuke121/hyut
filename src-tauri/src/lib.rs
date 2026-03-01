@@ -28,6 +28,7 @@ mod macos {
         // Liquid Glass: transparent window background
         let clear = NSColor::clearColor();
         ns_window.setBackgroundColor(Some(&clear));
+        ns_window.setAlphaValue(0.92);
     }
 
     pub fn show_window(ns_window: &NSWindow) {
