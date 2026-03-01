@@ -1,13 +1,13 @@
-import { useState, useCallback, useEffect } from "react";
-import type { Memo, MemoSummary } from "../types/memo";
+import { useCallback, useEffect, useState } from "react";
 import {
-  listMemos,
-  loadMemo,
   createMemo as createMemoCmd,
   deleteMemo as deleteMemoCmd,
   ensureMemoDir,
+  listMemos,
+  loadMemo,
 } from "../lib/commands";
 import { extractTitle } from "../lib/frontmatter";
+import type { Memo, MemoSummary } from "../types/memo";
 
 export function useMemos() {
   const [memos, setMemos] = useState<MemoSummary[]>([]);
@@ -50,25 +50,23 @@ export function useMemos() {
       }
       await refreshList();
     },
-    [currentMemo, refreshList]
+    [currentMemo, refreshList],
   );
 
   const updateCurrentBody = useCallback(
     (body: string) => {
       if (!currentMemo) return;
-      setCurrentMemo((prev) =>
-        prev ? { ...prev, body } : null
-      );
+      setCurrentMemo((prev) => (prev ? { ...prev, body } : null));
       const title = extractTitle(body);
       setMemos((prev) =>
         prev.map((m) =>
           m.id === currentMemo.meta.id
             ? { ...m, title, updated_at: new Date().toISOString() }
-            : m
-        )
+            : m,
+        ),
       );
     },
-    [currentMemo]
+    [currentMemo],
   );
 
   return {

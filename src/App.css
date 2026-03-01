@@ -13,7 +13,9 @@
   --titlebar-height: 38px;
   --sidebar-width: 240px;
 
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+    sans-serif;
   font-size: 14px;
   line-height: 1.5;
   color: var(--text-primary);
@@ -43,7 +45,9 @@
   box-sizing: border-box;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   overflow: hidden;
 }

@@ -1,4 +1,4 @@
-import { useRef, useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { saveMemo } from "../lib/commands";
 
 export function useAutoSave(delay = 1000) {
@@ -32,7 +32,7 @@ export function useAutoSave(delay = 1000) {
         }
       }, delay);
     },
-    [delay]
+    [delay],
   );
 
   useEffect(() => {

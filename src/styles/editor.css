@@ -65,7 +65,12 @@
   margin-top: 3px;
 }
 
-.editor-wrapper .tiptap ul[data-type="taskList"] li[data-checked="true"] > div > p {
+.editor-wrapper
+  .tiptap
+  ul[data-type="taskList"]
+  li[data-checked="true"]
+  > div
+  > p {
   text-decoration: line-through;
   opacity: 0.6;
 }
