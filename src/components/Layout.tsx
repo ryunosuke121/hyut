@@ -72,44 +72,13 @@ export default function Layout({ sidebar, editor }: Props) {
     };
   }, [isResizing]);
 
+  const toggleSidebar = useCallback(() => {
+    setSidebarOpen((prev) => !prev);
+  }, []);
+
   return (
     <div className="app-layout">
-      <TitleBar>
-        <button
-          type="button"
-          className="sidebar-toggle-btn"
-          onClick={() => setSidebarOpen((prev) => !prev)}
-          title={sidebarOpen ? "Hide sidebar (⌘\\)" : "Show sidebar (⌘\\)"}
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <rect
-              x="1.5"
-              y="2.5"
-              width="13"
-              height="11"
-              rx="1.5"
-              stroke="currentColor"
-              strokeWidth="1"
-              fill="none"
-            />
-            <line
-              x1="5.5"
-              y1="2.5"
-              x2="5.5"
-              y2="13.5"
-              stroke="currentColor"
-              strokeWidth="1"
-            />
-          </svg>
-        </button>
-      </TitleBar>
+      <TitleBar />
       <div className="app-content">
         <div
           className={`sidebar-container${sidebarOpen ? "" : " collapsed"}${isResizing ? " resizing" : ""}`}
@@ -121,17 +90,37 @@ export default function Layout({ sidebar, editor }: Props) {
         >
           {sidebar}
           {sidebarOpen && (
-            <div
-              role="separator"
-              tabIndex={0}
-              aria-valuenow={sidebarWidth}
-              aria-valuemin={MIN_SIDEBAR_WIDTH}
-              aria-valuemax={MAX_SIDEBAR_WIDTH}
-              className="sidebar-resize-handle"
-              onMouseDown={handleMouseDown}
-            />
+            <>
+              <button
+                type="button"
+                className="sidebar-toggle-btn"
+                onClick={toggleSidebar}
+                title="Hide sidebar (⌘\)"
+              >
+                «
+              </button>
+              <div
+                role="separator"
+                tabIndex={0}
+                aria-valuenow={sidebarWidth}
+                aria-valuemin={MIN_SIDEBAR_WIDTH}
+                aria-valuemax={MAX_SIDEBAR_WIDTH}
+                className="sidebar-resize-handle"
+                onMouseDown={handleMouseDown}
+              />
+            </>
           )}
         </div>
+        {!sidebarOpen && (
+          <button
+            type="button"
+            className="sidebar-toggle-btn sidebar-toggle-btn-closed"
+            onClick={toggleSidebar}
+            title="Show sidebar (⌘\)"
+          >
+            »
+          </button>
+        )}
         <div className="editor-pane">{editor}</div>
       </div>
     </div>
