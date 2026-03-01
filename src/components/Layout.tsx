@@ -51,11 +51,17 @@ export default function Layout({ sidebar, editor }: Props) {
 
     const handleMouseMove = (e: MouseEvent) => {
       const delta = e.clientX - startX.current;
-      const newWidth = Math.min(
-        MAX_SIDEBAR_WIDTH,
-        Math.max(MIN_SIDEBAR_WIDTH, startWidth.current + delta),
+      const rawWidth = startWidth.current + delta;
+      if (rawWidth < MIN_SIDEBAR_WIDTH) {
+        setSidebarOpen(false);
+        setIsResizing(false);
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
+        return;
+      }
+      setSidebarWidth(
+        Math.min(MAX_SIDEBAR_WIDTH, Math.max(MIN_SIDEBAR_WIDTH, rawWidth)),
       );
-      setSidebarWidth(newWidth);
     };
 
     const handleMouseUp = () => {
