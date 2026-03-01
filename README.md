@@ -2,43 +2,29 @@
 
 ヒュッとメモが開ける、macOS 向けメモアプリ。
 
-Tauri v2 + React + TypeScript で構築。
+## 特徴
 
-## 必要な環境
+- **グローバルショートカット** — `Cmd+Shift+M` でどこからでも即座にメモを呼び出し
+- **WYSIWYG Markdown** — 見たまま編集できる Markdown エディタ
+- **ローカル保存** — メモは `~/hyut/` にファイルとして保存。クラウド不要、制限なし
 
-- [Node.js](https://nodejs.org/) v18 以上
-- [Rust](https://www.rust-lang.org/tools/install)
-- macOS (Xcode Command Line Tools インストール済み)
+## インストール
 
-## セットアップ
-
-### 1. Rust のインストール
+[Homebrew](https://brew.sh/) でインストールできます。
 
 ```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-source "$HOME/.cargo/env"
+brew install --cask ryunosuke121/tap/hyut
 ```
 
-### 2. 依存パッケージのインストール
+## 使い方
 
-```bash
-npm install
-```
+1. インストール後、hyut を起動します
+2. `Cmd+Shift+M` でメモウィンドウを表示／非表示
+3. `Cmd+N` で新しいメモを作成
+4. `Escape` またはフォーカスを外すとウィンドウが自動で隠れます
 
-### 3. 開発サーバーの起動
+メモは自動保存されます。
 
-```bash
-npm run tauri dev
-```
+## 開発
 
-### 4. プロダクションビルド
-
-```bash
-npm run tauri build
-```
-
-ビルド成果物は `src-tauri/target/release/bundle/macos/hyut.app` に生成されます。
-
-## 推奨エディタ設定
-
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+開発に参加する場合は [DEVELOPMENT.md](DEVELOPMENT.md) を参照してください。
