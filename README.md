@@ -28,3 +28,7 @@ brew install --cask ryunosuke121/tap/hyut
 ## 開発
 
 開発に参加する場合は [DEVELOPMENT.md](DEVELOPMENT.md) を参照してください。
+
+## ライセンス
+
+[MIT](LICENSE)
