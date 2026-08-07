@@ -48,7 +48,7 @@ pub fn list_memos() -> Result<Vec<MemoSummary>, String> {
         }
     }
 
-    summaries.sort_by(|a, b| b.updated_at.cmp(&a.updated_at));
+    summaries.sort_by_key(|s| std::cmp::Reverse(s.updated_at));
     Ok(summaries)
 }
 
@@ -64,7 +64,7 @@ pub fn save_memo(id: String, body: String) -> Result<Memo, String> {
     let dir = memo_dir();
     fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
 
-    let path = dir.join(format!("{}.md", &id));
+    let path = dir.join(format!("{}.md", id));
     let now = Utc::now();
 
     let memo = if path.exists() {
@@ -115,7 +115,7 @@ pub fn create_memo() -> Result<Memo, String> {
         body: String::new(),
     };
 
-    let path = dir.join(format!("{}.md", &id));
+    let path = dir.join(format!("{}.md", id));
     let serialized = memo::serialize_memo(&memo);
     fs::write(&path, serialized).map_err(|e| e.to_string())?;
     Ok(memo)
