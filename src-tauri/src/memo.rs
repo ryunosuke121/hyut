@@ -49,13 +49,23 @@ pub fn serialize_memo(memo: &Memo) -> String {
     format!("---\n{}---\n{}", yaml, memo.body)
 }
 
+// Tiptap's markdown serializer renders an empty paragraph as a literal
+// "&nbsp;" (or a raw NBSP char) to preserve blank lines, so a blank
+// first line isn't actually an empty string here.
+fn is_blank_line(line: &str) -> bool {
+    line.replace("&nbsp;", "")
+        .replace('\u{00A0}', "")
+        .trim()
+        .is_empty()
+}
+
 pub fn extract_title(body: &str) -> String {
     for line in body.lines() {
         let trimmed = line.trim();
         if let Some(stripped) = trimmed.strip_prefix("# ") {
             return stripped.trim().to_string();
         }
-        if !trimmed.is_empty() {
+        if !is_blank_line(trimmed) {
             return trimmed.chars().take(50).collect();
         }
     }
