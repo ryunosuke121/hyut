@@ -87,6 +87,8 @@ pub fn run() {
                             macos::show_window(ns_window);
                         }
                     })?;
+
+                macos::show_window(ns_window);
             }
 
             #[cfg(not(target_os = "macos"))]
@@ -106,9 +108,7 @@ pub fn run() {
                             }
                         }
                     })?;
-            }
 
-            if cfg!(debug_assertions) {
                 if let Some(window) = app.get_webview_window("main") {
                     let _ = window.show();
                     let _ = window.set_focus();
