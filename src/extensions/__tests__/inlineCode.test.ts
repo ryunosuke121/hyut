@@ -20,7 +20,7 @@ function typeText(editor: Editor, text: string) {
   for (const char of text) {
     const { from, to } = editor.state.selection;
     const handled = editor.view.someProp("handleTextInput", (f) =>
-      f(editor.view, from, to, char),
+      f(editor.view, from, to, char, () => editor.state.tr),
     );
     if (!handled) {
       editor.commands.insertContent(char);
@@ -45,11 +45,14 @@ describe("inline code input rule", () => {
     const doc = editor.getJSON();
     const paragraph = doc.content?.[0];
     const textNodes = paragraph?.content ?? [];
-    const codeNode = textNodes.find((node) =>
-      node.marks?.some((mark) => mark.type === "code"),
+    const codeNode = textNodes.find(
+      (node) =>
+        "text" in node && node.marks?.some((mark) => mark.type === "code"),
     );
 
     expect(editor.getText()).toBe("hello world");
-    expect(codeNode?.text).toBe("world");
+    expect(codeNode && "text" in codeNode ? codeNode.text : undefined).toBe(
+      "world",
+    );
   });
 });
