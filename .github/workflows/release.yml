@@ -123,12 +123,18 @@ jobs:
         env:
           HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
         run: |
+          if [ -z "$HOMEBREW_TAP_TOKEN" ]; then
+            echo "HOMEBREW_TAP_TOKEN が空です。Secretsの設定を確認してください" >&2
+            exit 1
+          fi
+
           VERSION="${{ steps.version.outputs.version }}"
           DMG_NAME="${{ steps.dmg.outputs.name }}"
           DMG_URL="https://github.com/${{ github.repository }}/releases/download/v${VERSION}/${DMG_NAME}"
           SHA256=$(shasum -a 256 "${{ steps.dmg.outputs.path }}" | awk '{print $1}')
 
-          git clone "https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/ryunosuke121/homebrew-tap.git" tap
+          TAP_URL="https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/ryunosuke121/homebrew-tap.git"
+          git clone "$TAP_URL" tap
           cd tap
 
           mkdir -p Casks
@@ -153,4 +159,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add Casks/hyut.rb
           git commit -m "Update hyut to v${VERSION}"
-          git push
+          git push "$TAP_URL" HEAD:main
