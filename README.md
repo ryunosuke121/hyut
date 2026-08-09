@@ -16,6 +16,13 @@
 brew install --cask ryunosuke121/tap/hyut
 ```
 
+更新する場合は以下を実行してください。
+
+```bash
+brew update
+brew upgrade --cask hyut
+```
+
 ## 使い方
 
 1. インストール後、hyut を起動します
