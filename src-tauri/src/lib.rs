@@ -23,7 +23,7 @@ mod macos {
             NSWindowCollectionBehavior::CanJoinAllSpaces
                 | NSWindowCollectionBehavior::FullScreenAuxiliary,
         );
-        ns_window.setLevel(101); // NSPopUpMenuWindowLevel
+        ns_window.setLevel(3); // NSFloatingWindowLevel
 
         // Liquid Glass: transparent window background
         let clear = NSColor::clearColor();
