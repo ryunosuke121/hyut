@@ -88,15 +88,19 @@
   opacity: 0.5;
 }
 
+/* No backdrop-filter here: WebKit can fail to paint/blink the caret right
+   after the backtick input rule wraps text in this element, since
+   backdrop-filter forces a new compositing layer at the exact spot the
+   cursor lands in. caret-color guards against the same symptom from a
+   low-contrast blend with the translucent background. */
 .editor-wrapper .tiptap code {
   background: var(--bg-code);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   border-radius: 6px;
   padding: 0.15em 0.4em;
   font-family: "SF Mono", "Menlo", "Monaco", monospace;
   font-size: 0.88em;
   border: 0.5px solid var(--border-color);
+  caret-color: var(--text-primary);
 }
 
 .editor-wrapper .tiptap pre {
