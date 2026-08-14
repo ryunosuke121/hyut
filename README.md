@@ -1,6 +1,10 @@
-# hyut
+<p align="center">
+  <img src="src-tauri/icons/icon.png" width="128" height="128" alt="hyut app icon">
+</p>
 
-ヒュッとメモが開ける、macOS 向けメモアプリ。
+<h1 align="center">hyut</h1>
+
+<p align="center">ヒュッとメモが開ける、macOS 向けメモアプリ。</p>
 
 ## 特徴
 
